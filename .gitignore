@@ -1,0 +1,85 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.cache/
+.tmp/
+coverage/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+logs/*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Local databases
+*.sqlite
+*.db
+
+# Uploads / temp files
+uploads/
+temp/
+tmp/
+
+# Test coverage / reports
+coverage/
+*.lcov
+
+# Python (if you have AI/ML utils)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+venv/
+env/
+ENV/
+
+# Misc
+*.bak
+*.orig
+
+# Ignore private keys or sensitive configs
+*.pem
+*.key
+*.crt
+*.cert
+*.keystore
+secrets.json
+config.json
+
+# Ignore deployment and cache artifacts
+.vercel/
+.netlify/
+.render/
+firebase-debug.log
