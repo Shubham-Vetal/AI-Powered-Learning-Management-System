@@ -45,7 +45,7 @@ export const createCheckoutSession = async (req, res) => {
         },
       ],
       mode: "payment",
-     success_url: `${frontendUrl}/course-progress/${courseId}`,
+     success_url: `${frontendUrl}/payment-success?courseId=${courseId}`,
       cancel_url: `${frontendUrl}/course-detail/${courseId}`,
       metadata: {
         courseId: courseId,
