@@ -1,6 +1,12 @@
 import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import { createCheckoutSession, getAllPurchasedCourse, getCourseDetailWithPurchaseStatus, stripeWebhook } from "../controllers/coursePurchase.controller.js";
+import {
+  createCheckoutSession,
+  getAllPurchasedCourse,
+  getCourseDetailWithPurchaseStatus,
+  stripeWebhook,
+} from "../controllers/purchaseCourse.controller.js";
+
 
 const router = express.Router();
 
