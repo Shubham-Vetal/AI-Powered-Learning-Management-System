@@ -82,9 +82,9 @@ export const logout = async (_, res) => {
   try {
     const cookieOptions = {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 0, // Clear cookie
+      maxAge: 0, // Clear the cookie
     };
 
     return res.status(200).cookie("token", "", cookieOptions).json({
