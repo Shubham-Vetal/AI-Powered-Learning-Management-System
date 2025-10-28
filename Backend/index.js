@@ -19,16 +19,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// IMPORTANT: Webhook route BEFORE express.json() middleware
-// Stripe webhooks need raw body
-app.use("/api/v1/purchase/webhook", express.raw({ type: 'application/json' }));
-
-// default middleware
-app.use(express.json());
-app.use(cookieParser());
-
-// CORS configuration - Updated
-app.use(cors({
+// CORS configuration - MUST be before other middleware
+const corsOptions = {
     origin: function (origin, callback) {
       const allowedOrigins = [
         "http://localhost:5173",
@@ -44,10 +36,28 @@ app.use(cors({
         callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true,
+    credentials: true, // THIS IS CRITICAL for cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+    exposedHeaders: ['Set-Cookie'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+// IMPORTANT: Webhook route BEFORE express.json() middleware
+app.post("/api/v1/purchase/webhook", express.raw({ type: 'application/json' }), (req, res, next) => {
+  // Your webhook handler will be called from the route
+  next();
+});
+
+// default middleware
+app.use(express.json());
+app.use(cookieParser());
  
 // apis
 app.use("/api/v1/media", mediaRoute);
