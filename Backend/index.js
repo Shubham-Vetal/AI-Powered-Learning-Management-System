@@ -9,7 +9,7 @@ import mediaRoute from "./routes/media.route.js";
 import purchaseRoute from "./routes/purchaseCourse.route.js";
 import courseProgressRoute from "./routes/courseProgress.route.js";
 import chatbotRoute from "./routes/chatbot.routes.js";
-import notificationRoute from "./routes/notification.routes.js"
+import notificationRoute from "./routes/notification.routes.js";
 
 dotenv.config({});
 
@@ -19,7 +19,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// CORS configuration - MUST be before other middleware
+// CORS configuration
 const corsOptions = {
     origin: function (origin, callback) {
       const allowedOrigins = [
@@ -27,7 +27,6 @@ const corsOptions = {
         "https://lms-frontend-7jc8.onrender.com"
       ];
       
-      // Allow requests with no origin (like mobile apps or Postman)
       if (!origin) return callback(null, true);
       
       if (allowedOrigins.indexOf(origin) !== -1) {
@@ -36,30 +35,32 @@ const corsOptions = {
         callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true, // THIS IS CRITICAL for cookies
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['Set-Cookie'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
-
-// IMPORTANT: Webhook route BEFORE express.json() middleware
-app.post("/api/v1/purchase/webhook", express.raw({ type: 'application/json' }), (req, res, next) => {
-  // Your webhook handler will be called from the route
-  next();
+// CRITICAL: Webhook route needs raw body - must be BEFORE express.json()
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/v1/purchase/webhook') {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
 });
 
-// default middleware
-app.use(express.json());
 app.use(cookieParser());
+
+// Webhook route with raw body parser
+import { stripeWebhook } from "./controllers/purchaseCourse.controller.js";
+app.post('/api/v1/purchase/webhook', 
+  express.raw({ type: 'application/json' }), 
+  stripeWebhook
+);
  
-// apis
+// Other API routes
 app.use("/api/v1/media", mediaRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);
