@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const CHATBOT_API = "http://localhost:8000/api/v1/chatbot/";
+const CHATBOT_API = "https://lms-backend-7o2h.onrender.com/api/v1/chatbot/";
 
 export const chatbotApi = createApi({
   reducerPath: "chatbotApi",

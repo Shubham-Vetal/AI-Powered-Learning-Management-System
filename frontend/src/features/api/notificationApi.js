@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const notificationApi = createApi({
   reducerPath: "notificationApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/v1/notification",
+    baseUrl: "https://lms-backend-7o2h.onrender.com/api/v1/notification",
     credentials: "include",
   }),
   tagTypes: ["Notifications"],

@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
 import { notificationApi } from "./notificationApi";
 
-const USER_API = "http://localhost:8000/api/v1/user/"
+const USER_API = "https://lms-backend-7o2h.onrender.com/api/v1/user/"
 
 export const authApi = createApi({
     reducerPath:"authApi",
