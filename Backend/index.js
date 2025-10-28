@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 
 // Webhook route with raw body parser
-import { stripeWebhook } from "./controllers/purchaseCourse.controller.js";
+import { stripeWebhook } from "./controllers/coursePurchase.controller.js";
 app.post('/api/v1/purchase/webhook', 
   express.raw({ type: 'application/json' }), 
   stripeWebhook
