@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 const MyLearning = () => {
   const { data, isLoading } = useLoadUserQuery();
   const myLearning = data?.user.enrolledCourses || [];
+  
+  //Filter out null/invalid courses
+  const validCourses = myLearning.filter(course => course !== null && course?.courseTitle);
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-0 mt-5">
@@ -24,7 +27,7 @@ const MyLearning = () => {
       <div className="my-5">
         {isLoading ? (
           <MyLearningSkeleton />
-        ) : myLearning.length === 0 ? (
+        ) : validCourses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <img
               src="https://illustrations.popsy.co/violet/student.svg"
@@ -32,7 +35,7 @@ const MyLearning = () => {
               className="w-56 mb-6"
             />
             <p className="text-gray-600 text-lg">
-              You’re not enrolled in any courses yet.
+              You're not enrolled in any courses yet.
             </p>
           </div>
         ) : (
@@ -42,9 +45,9 @@ const MyLearning = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {myLearning.map((course, index) => (
+            {validCourses.map((course, index) => (
               <motion.div
-                key={index}
+                key={course._id || index} // Use _id if available
                 whileHover={{ scale: 1.03 }}
                 transition={{ type: "spring", stiffness: 200 }}
               >
