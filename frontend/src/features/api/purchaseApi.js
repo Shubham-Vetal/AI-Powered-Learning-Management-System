@@ -30,7 +30,7 @@ export const purchaseApi = createApi({
         url: `/`,
         method: "GET",
       }),
-      providesTags: ["PurchaseStatus"], marks this data for cache invalidation
+      providesTags: ["PurchaseStatus"],
     }),
   }),
 });
