@@ -8,20 +8,18 @@ const PurchaseCourseProtectedRoute = ({ children }) => {
   const [retryCount, setRetryCount] = useState(0);
   const { data, isLoading, refetch } = useGetCourseDetailWithStatusQuery(courseId);
 
-  // Retry logic: Check purchase status multiple times
   useEffect(() => {
     if (!isLoading && !data?.purchased && retryCount < 5) {
       const timer = setTimeout(() => {
-        console.log(`Retrying purchase verification... Attempt ${retryCount + 1}/5`);
+        console.log(`Retrying purchase verification... Attempt ${retryCount + 1}/5`); // ✅ Fixed
         refetch();
         setRetryCount((prev) => prev + 1);
-      }, 2000); // Wait 2 seconds between retries
-
+      }, 2000);
+      
       return () => clearTimeout(timer);
     }
   }, [data?.purchased, isLoading, retryCount, refetch]);
 
-  // Show loading state while checking or retrying
   if (isLoading || (retryCount > 0 && retryCount < 5 && !data?.purchased)) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
@@ -40,12 +38,10 @@ const PurchaseCourseProtectedRoute = ({ children }) => {
     );
   }
 
-  // After retries, if still not purchased, redirect to course detail
   if (!data?.purchased) {
-    return <Navigate to={`/course-detail/${courseId}`} />;
+    return <Navigate to={`/course-detail/${courseId}`} />; // ✅ Fixed
   }
 
-  // Purchase verified, show the protected content
   return children;
 };
 
