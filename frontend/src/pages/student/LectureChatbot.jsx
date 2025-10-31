@@ -4,12 +4,12 @@ import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { useAskLectureTutorMutation } from "@/features/api/chatbotApi";
 import { toast } from "sonner";
 
-const LectureChatbot = ({ courseId, lectureId, lectureTitle }) => {
+const LectureChatbot = ({ courseId, lectureId, lectureTitle , courseTitle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: `Hi! I'm your AI tutor for "${lectureTitle}". Ask me anything about this lecture!`,
+      content: `Hi! I'm your AI tutor for "${courseTitle}". Ask me anything about this lecture!`,
     },
   ]);
   const [input, setInput] = useState("");
