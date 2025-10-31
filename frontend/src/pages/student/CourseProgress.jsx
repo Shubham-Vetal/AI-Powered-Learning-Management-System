@@ -552,6 +552,7 @@ const CourseProgress = () => {
         <LectureChatbot
           courseId={courseId}
           lectureId={lectureId}
+          courseTitle={courseTitle}
           lectureTitle={currentLectureTitle}
         />
       )}
