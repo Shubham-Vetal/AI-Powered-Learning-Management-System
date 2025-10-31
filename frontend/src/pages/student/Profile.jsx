@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import { NotificationContext } from "@/components/NotificationProvider";
+import React, { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -20,10 +19,9 @@ import Course from "./Course";
 import { useLoadUserQuery, useUpdateUserMutation } from "@/features/api/authApi";
 
 const Profile = () => {
-  const { addNotification } = useContext(NotificationContext);
-
   const [name, setName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data, isLoading, refetch } = useLoadUserQuery();
   const [updateUser, { isLoading: updateUserIsLoading }] = useUpdateUserMutation();
@@ -44,14 +42,26 @@ const Profile = () => {
     if (profilePhoto) formData.append("profilePhoto", profilePhoto);
 
     try {
-      const result = await updateUser(formData).unwrap(); // unwrap ensures promise resolves/rejects
-      addNotification({ text: "You have updated your profile!" });
+      const result = await updateUser(formData).unwrap();
+      
+      console.log("Update result:", result); // Debug log
+      
       toast.success(result.message || "Profile updated successfully!");
-      setName(""); // reset input
-      setProfilePhoto(""); // reset file input
-      refetch(); // reload user data
+      
+      // Reset form
+      setName("");
+      setProfilePhoto("");
+      
+      // Close dialog
+      setIsDialogOpen(false);
+      
+      // The cache will be automatically invalidated due to invalidatesTags
+      // But we can also manually refetch if needed
+      refetch();
+      
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to update profile");
+      console.error("Profile update error:", err); // Debug log
+      toast.error(err?.data?.message || err?.message || "Failed to update profile");
     }
   };
 
@@ -93,7 +103,7 @@ const Profile = () => {
             </span>
           </div>
 
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 size="sm"
@@ -153,7 +163,7 @@ const Profile = () => {
       {/* Courses Section */}
       <div className="mt-10">
         <h2 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">
-          Courses You’re Enrolled In
+          Courses You're Enrolled In
         </h2>
         {user.enrolledCourses.length === 0 ? (
           <div className="text-center text-gray-500 py-8 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
